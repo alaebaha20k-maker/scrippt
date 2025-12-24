@@ -566,12 +566,27 @@
             text = text.replace(/\d+\s*dollars?/gi, '');
             text = text.replace(/\b(price|cost|afford|cheap|expensive|discount|sale)\b/gi, '');
 
+            // Remove ALL markdown formatting for CLEAN VOICE-READY output (CRITICAL)
+            text = text.replace(/\*\*\*(.+?)\*\*\*/g, '$1');  // Bold+Italic
+            text = text.replace(/\*\*(.+?)\*\*/g, '$1');      // Bold
+            text = text.replace(/\*(.+?)\*/g, '$1');          // Italic
+            text = text.replace(/__(.+?)__/g, '$1');          // Bold underscore
+            text = text.replace(/_(.+?)_/g, '$1');            // Italic underscore
+            text = text.replace(/~~(.+?)~~/g, '$1');          // Strikethrough
+            text = text.replace(/`(.+?)`/g, '$1');            // Inline code
+            text = text.replace(/#{1,6}\s+/g, '');            // Headers
+            text = text.replace(/\[(.+?)\]\(.+?\)/g, '$1');   // Links
+            text = text.replace(/^[\s]*[-*+]\s+/gm, '');      // List bullets
+            text = text.replace(/^\d+\.\s+/gm, '');           // Numbered lists
+            text = text.replace(/^>\s+/gm, '');               // Blockquotes
+
+            // Remove any remaining asterisks and formatting
+            text = text.replace(/\*asterisk\*/gi, '');
+            text = text.replace(/\*/g, '');  // Remove any remaining asterisks
+
             // Fix spacing issues
             text = text.replace(/\n{4,}/g, '\n\n\n');
             text = text.replace(/  +/g, ' ');
-
-            // Remove any remaining asterisks placeholders
-            text = text.replace(/\*asterisk\*/gi, '');
 
             // Fix common errors
             text = text.replace(/sevenf figureure/g, 'seven-figure');
@@ -613,8 +628,15 @@
             const issues = [];
 
             // Check for asterisks
-            if (script.includes('asterisk')) {
-                issues.push('Contains asterisk placeholders');
+            if (script.includes('asterisk') || /\*\*|\*|__/.test(script)) {
+                issues.push('⚠️ Contains markdown/asterisks - auto-cleaning...');
+                // Auto-clean markdown
+                script = script.replace(/\*\*\*(.+?)\*\*\*/g, '$1');
+                script = script.replace(/\*\*(.+?)\*\*/g, '$1');
+                script = script.replace(/\*(.+?)\*/g, '$1');
+                script = script.replace(/__(.+?)__/g, '$1');
+                script = script.replace(/_(.+?)_/g, '$1');
+                script = script.replace(/\*/g, '');
             }
 
             // Check for price mentions (CRITICAL)
@@ -624,6 +646,14 @@
                 script = script.replace(/\$\d+/g, '');
                 script = script.replace(/\d+\s*dollars?/gi, '');
                 script = script.replace(/\b(price|cost)\b/gi, '');
+            }
+
+            // Check for "link in description" mentions
+            const linkMentions = (script.toLowerCase().match(/link in (the )?description/g) || []).length;
+            if (linkMentions < 2) {
+                issues.push(`Only ${linkMentions} "link in description" mentions (need 2-3)`);
+            } else if (linkMentions > 3) {
+                issues.push(`Too many "link in description" mentions: ${linkMentions} (need 2-3)`);
             }
 
             // Check for repetitive transitions
@@ -824,18 +854,23 @@ OPENING THIRD STRUCTURE:
 5. Build toward deeper exploration
 6. [OPTIONAL] Drop ONE product mention that creates massive curiosity
 
-QUALITY RULES:
+QUALITY RULES (DOCUMENT 8 STANDARD):
 ✅ Vary every paragraph opening (never repeat transitions)
-✅ Mix sentence lengths: short punches (6-10 words) + explanations (15-20 words)
+✅ MAXIMUM 20 WORDS PER SENTENCE (strict limit for voice-ready flow)
+✅ Mix sentence lengths: short punches (6-10 words) + explanations (12-18 words MAX)
 ✅ Use specific numbers ($8,432 not "$8,000", "6 weeks" not "a while")
 ✅ Educational tone - teaching not selling
 ✅ Professional confidence without hype
 ✅ Natural language - conversational but intelligent
 ✅ Real trader examples when appropriate (Seykota, Livermore, Tudor Jones, Minervini, O'Neil)
 ✅ Clean psychological frameworks explained clearly
+✅ CLEAN VOICE-READY TEXT - absolutely NO markdown, asterisks, or formatting
+✅ Include "Link in description" at LEAST once in this section
 
 ❌ FORBIDDEN:
-❌ Asterisks or placeholder text
+❌ Asterisks, markdown formatting (**bold**, *italic*, etc.)
+❌ Any formatting symbols or special characters
+❌ Sentences over 20 words
 ❌ Repetitive phrases ("Let me tell you", "Here's the thing", etc.)
 ❌ Fake urgency or scarcity tactics
 ❌ Melodramatic language
@@ -891,16 +926,22 @@ CONTENT GUIDELINES:
 - Show progression and compounding effects with numbers
 - Make it about METHOD not luck
 
-QUALITY STANDARDS:
+QUALITY STANDARDS (DOCUMENT 8 STANDARD):
 ✅ Educational and valuable every paragraph
+✅ MAXIMUM 20 WORDS PER SENTENCE (strict limit)
 ✅ Specific, actionable insights with real numbers
 ✅ Professional tone without hype
 ✅ Varied language and structure
 ✅ Real examples and frameworks
 ✅ No manipulation
 ✅ NO price mention anywhere
+✅ CLEAN VOICE-READY TEXT - NO markdown or formatting
+✅ Include "Link in description" if you mention product (optional in this section)
 
 ❌ FORBIDDEN:
+❌ Markdown formatting (**bold**, *italic*, etc.)
+❌ Asterisks or special characters
+❌ Sentences over 20 words
 ❌ Meta-commentary about script structure
 ❌ "As I mentioned" or "continuing from"
 ❌ Repetitive transitions
@@ -966,28 +1007,33 @@ Link in the description. This is the difference between staying stuck and finall
 
 If you got value from this, hit subscribe. Let me know in the comments what clicked for you. I'll see you in the next one."
 
-CRITICAL CTA RULES:
+CRITICAL CTA RULES (DOCUMENT 8 STANDARD):
 ✅ Build MASSIVE value (list what's inside: books, frameworks, systems)
 ✅ Create FOMO (what top 5% study vs what amateurs chase)
 ✅ Position as ESSENTIAL (difference between success and failure)
 ✅ Authority (mention specific books/systems: Trading in the Zone, Disciplined Trader, Market Wizards)
 ✅ Contrast (this vs staying stuck)
-✅ Simple CTA: "Link in the description"
+✅ STRATEGIC "Link in description" placement: 2-3 times total in script (ensure at least 1-2 in this section)
 ❌ NEVER mention price (creates mystery, forces click)
 ❌ NO "buy now", "limited time", sales language
 ❌ NO desperation or begging
 
 ALTERNATIVE: If topic doesn't fit product well, do pure value close with just subscribe CTA.
 
-QUALITY STANDARDS:
+QUALITY STANDARDS (DOCUMENT 8 STANDARD):
 ✅ Educational and valuable throughout
+✅ MAXIMUM 20 WORDS PER SENTENCE (strict limit for voice-ready flow)
 ✅ Specific implementation steps with numbers
 ✅ Professional tone maintained
 ✅ Natural product integration that feels helpful
 ✅ Strong close that ties everything together
 ✅ NO price mention anywhere
+✅ CLEAN VOICE-READY TEXT - absolutely NO markdown, asterisks, or formatting
 
 ❌ FORBIDDEN:
+❌ Markdown formatting (**bold**, *italic*, etc.)
+❌ Asterisks or special characters
+❌ Sentences over 20 words
 ❌ Price mentions
 ❌ "Buy now" or sales pressure
 ❌ Fake urgency
