@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Elite Trading Script Generator V2 - Maximum Quality</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            padding: 40px 30px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            border: 2px solid rgba(139,92,246,0.3);
+            margin-bottom: 30px;
+            animation: glow 2s ease-in-out infinite;
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(139,92,246,0.3); }
+            50% { box-shadow: 0 0 50px rgba(139,92,246,0.5); }
+        }
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #c4b5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-weight: 900;
+        }
+        .subtitle {
+            font-size: 1.1em;
+            color: #a78bfa;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        .badge-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background: rgba(139,92,246,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            border: 1px solid rgba(139,92,246,0.4);
+        }
+        .main-grid {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 25px;
+        }
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .sidebar {
+            background: rgba(0,0,0,0.4);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid rgba(139,92,246,0.2);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        .content-panel {
+            background: rgba(0,0,0,0.4);
+            padding: 35px;
+            border-radius: 15px;
+            border: 2px solid rgba(139,92,246,0.2);
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section h3 {
+            color: #a78bfa;
+            margin-bottom: 15px;
+            font-size: 1.15em;
+            border-bottom: 2px solid rgba(139,92,246,0.2);
+            padding-bottom: 10px;
+        }
+        .input-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #c4b5fd;
+            font-size: 0.95em;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(139,92,246,0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            background: rgba(139,92,246,0.1);
+        }
+        input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139,92,246,0.5);
+        }
+        .btn:disabled {
+            background: #444;
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.6;
+        }
+        .info-box {
+            background: rgba(139,92,246,0.1);
+            border-left: 4px solid #8b5cf6;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 0.88em;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+        .length-option {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(139,92,246,0.2);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .length-option:hover {
+            background: rgba(139,92,246,0.15);
+            border-color: #8b5cf6;
+        }
+        .length-option.selected {
+            background: rgba(139,92,246,0.25);
+            border-color: #8b5cf6;
+            border-width: 3px;
+        }
+        .length-option input[type="radio"] {
+            margin-right: 12px;
+            width: auto;
+        }
+        .length-option label {
+            display: inline;
+            cursor: pointer;
+            margin-bottom: 0;
+            font-size: 1.05em;
+        }
+        .length-details {
+            font-size: 0.85em;
+            opacity: 0.75;
+            margin-top: 6px;
+            margin-left: 30px;
+        }
+        .progress-section {
+            display: none;
+            margin: 30px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 40px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 2px solid rgba(139,92,246,0.3);
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+        .status {
+            background: rgba(0,0,0,0.3);
+            padding: 18px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(139,92,246,0.2);
+            line-height: 1.7;
+        }
+        .result-card {
+            background: rgba(16,185,129,0.1);
+            border: 2px solid #10b981;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+        .result-card.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .stat-box {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: 900;
+            color: #10b981;
+            display: block;
+        }
+        .stat-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        .download-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        .error-box {
+            background: rgba(239,68,68,0.1);
+            border: 2px solid #ef4444;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            color: #fca5a5;
+            display: none;
+        }
+        .error-box.show {
+            display: block;
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8b5cf6;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 ELITE TRADING SCRIPT GENERATOR V2</h1>
+            <p class="subtitle">Gemini 2.5 Flash • Maximum Quality Mode • Voice-Ready</p>
+            <div class="badge-row">
+                <span class="badge">🎤 Voice Ready</span>
+                <span class="badge">📊 Educational Focus</span>
+                <span class="badge">🚀 3-Part System</span>
+                <span class="badge">💎 Ultra High Quality</span>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="sidebar">
+                <div class="section">
+                    <h3>🔑 API Configuration</h3>
+                    <div class="input-group">
+                        <label>Gemini 2.5 Flash API Key</label>
+                        <input type="password" id="apiKey" placeholder="Enter your API key..." />
+                    </div>
+                    <div class="info-box">
+                        <strong>Get Free API:</strong> ai.google.dev<br>
+                        <strong>Free Tier:</strong> 15 RPM, 1,500 RPD<br>
+                        <strong>This tool:</strong> 3 optimized API calls
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>📏 Script Length</h3>
+                    <div id="lengthOptions">
+                        <div class="length-option" onclick="selectLength(30000, this)">
+                            <input type="radio" name="length" id="len30k">
+                            <label for="len30k">30K - Medium Script</label>
+                            <div class="length-details">~6,500 words • 20 min video</div>
+                        </div>
+                        <div class="length-option selected" onclick="selectLength(60000, this)">
+                            <input type="radio" name="length" id="len60k" checked>
+                            <label for="len60k">60K - Full Script ⭐</label>
+                            <div class="length-details">~13,000 words • 45 min video</div>
+                        </div>
+                        <div class="length-option" onclick="selectLength(100000, this)">
+                            <input type="radio" name="length" id="len100k">
+                            <label for="len100k">100K - Epic Script 🔥</label>
+                            <div class="length-details">~22,000 words • 70 min video</div>
+                        </div>
+                    </div>
+                    <div class="info-box" id="lengthInfo">
+                        Selected: <strong>60K minimum</strong><br>
+                        ONE seamless block<br>
+                        Maximum quality mode
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💎 Fixed Product</h3>
+                    <div class="info-box">
+                        <strong>THE 7-FIGURE TRADER'S MIND VAULT</strong><br><br>
+                        Proven Psychology & Strategies to Transform Your Trading Forever<br><br>
+                        ✅ Natural integration<br>
+                        ✅ Subtle early mention<br>
+                        ✅ Strong value-based CTA
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-panel">
+                <div class="section">
+                    <h3>✍️ Generate Your Trading Script</h3>
+                    
+                    <div class="input-group">
+                        <label>Video Title / Main Topic</label>
+                        <input type="text" id="videoTitle" placeholder="e.g., Why Trading Multiple Setups Keeps You Broke" />
+                    </div>
+
+                    <div class="input-group">
+                        <label>Core Insight (Optional)</label>
+                        <textarea id="coreInsight" placeholder="What counterintuitive truth will you reveal? (AI creates if blank)"></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Key Points (Optional)</label>
+                        <textarea id="keyPoints" placeholder="• Main psychological trap&#10;• Why it happens&#10;• Real examples&#10;• Actionable solution"></textarea>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>🤖 AI Will Create (HIGH QUALITY MODE):</strong><br>
+                        ✅ Powerful counterintuitive hook<br>
+                        ✅ Deep psychological frameworks<br>
+                        ✅ Real trader examples (Ed Seykota, Jesse Livermore, etc)<br>
+                        ✅ Practical, actionable insights<br>
+                        ✅ Specific implementation steps<br>
+                        ✅ Natural product integration<br>
+                        ✅ Educational-first approach (like Document 2)<br>
+                        ✅ ONE seamless block output
+                    </div>
+
+                    <button class="btn" id="generateBtn" onclick="generateScript()">🚀 GENERATE HIGH-QUALITY SCRIPT</button>
+                    
+                    <div class="error-box" id="errorBox"></div>
+                </div>
+
+                <div class="progress-section" id="progressSection">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill">0%</div>
+                    </div>
+                    <div class="status" id="status">Ready to generate...</div>
+                </div>
+
+                <div class="result-card" id="resultCard">
+                    <h3 style="color: #10b981; text-align: center; margin-bottom: 20px;">🎉 Script Complete!</h3>
+                    
+                    <div class="stats">
+                        <div class="stat-box">
+                            <span class="stat-number" id="charCount">0</span>
+                            <span class="stat-label">Characters</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number" id="wordCount">0</span>
+                            <span class="stat-label">Words</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number" id="chunkCount">1</span>
+                            <span class="stat-label">ONE Block</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number" id="timeCount">0s</span>
+                            <span class="stat-label">Time</span>
+                        </div>
+                    </div>
+
+                    <button class="btn download-btn" onclick="downloadScript()">
+                        📥 DOWNLOAD VOICE-READY SCRIPT
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedLength = 60000;
+        let finalScript = '';
+        let startTime = 0;
+
+        const PRODUCT = {
+            name: "THE 7-FIGURE TRADER'S MIND VAULT",
+            tagline: "Proven Psychology & Strategies to Transform Your Trading Forever",
+            price: "$67 (Launch Price)",
+            value: "Complete trading psychology transformation system with premium audiobooks, mindset frameworks, psychology fix documents, elite mental edge resources, and proven strategy guides."
+        };
+
+        function selectLength(length, element) {
+            selectedLength = length;
+            document.querySelectorAll('.length-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            document.getElementById('lengthInfo').innerHTML = `
+                Selected: <strong>${(length/1000)}K minimum</strong><br>
+                ONE seamless block<br>
+                Maximum quality mode
+            `;
+        }
+
+        function updateStatus(msg) {
+            const statusDiv = document.getElementById('status');
+            const timestamp = new Date().toLocaleTimeString();
+            statusDiv.innerHTML += `<div>[${timestamp}] ${msg}</div>`;
+            statusDiv.scrollTop = statusDiv.scrollHeight;
+        }
+
+        function updateProgress(percent) {
+            const fill = document.getElementById('progressFill');
+            fill.style.width = percent + '%';
+            fill.textContent = Math.round(percent) + '%';
+        }
+
+        function showError(msg) {
+            const errorBox = document.getElementById('errorBox');
+            errorBox.textContent = '⚠️ ' + msg;
+            errorBox.classList.add('show');
+            setTimeout(() => errorBox.classList.remove('show'), 8000);
+        }
+
+        async function callGemini(prompt, retryCount = 0) {
+            const apiKey = document.getElementById('apiKey').value;
+            const maxRetries = 3;
+            
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: {
+                            temperature: 0.85,
+                            maxOutputTokens: 65536,
+                            topP: 0.92,
+                            topK: 35
+                        }
+                    })
+                });
+
+                if (response.status === 429) {
+                    if (retryCount < maxRetries) {
+                        const waitTime = Math.pow(2, retryCount) * 5;
+                        updateStatus(`⏳ Rate limit, waiting ${waitTime}s (retry ${retryCount + 1}/${maxRetries})...`);
+                        await new Promise(r => setTimeout(r, waitTime * 1000));
+                        return callGemini(prompt, retryCount + 1);
+                    }
+                    throw new Error('Rate limit exceeded. Wait 60 seconds and try again.');
+                }
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(`API Error: ${errorData.error?.message || response.statusText}`);
+                }
+
+                const data = await response.json();
+                if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    throw new Error('Invalid API response');
+                }
+                
+                return data.candidates[0].content.parts[0].text.trim();
+            } catch (error) {
+                if (retryCount < maxRetries && error.message.includes('fetch')) {
+                    updateStatus(`⚠️ Network error, retrying (${retryCount + 1}/${maxRetries})...`);
+                    await new Promise(r => setTimeout(r, 2000));
+                    return callGemini(prompt, retryCount + 1);
+                }
+                throw error;
+            }
+        }
+
+        function cleanChunkArtifacts(text) {
+            text = text.replace(/📝 CONTINUE FROM:.*?\n/g, '');
+            text = text.replace(/\*\*CONTINUE.*?\*\*/gi, '');
+            text = text.replace(/\*\*BEGIN.*?\*\*/gi, '');
+            text = text.replace(/\*\*COMPLETE.*?\*\*/gi, '');
+            text = text.replace(/Chunk \d+\/\d+/gi, '');
+            text = text.replace(/Continue seamlessly.*/gi, '');
+            text = text.replace(/Let me continue.*/gi, '');
+            text = text.replace(/Continuing from.*/gi, '');
+            text = text.replace(/\n{4,}/g, '\n\n\n');
+            
+            return text.trim();
+        }
+
+        async function generateScript() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const title = document.getElementById('videoTitle').value.trim();
+            const coreInsight = document.getElementById('coreInsight').value.trim();
+            const keyPoints = document.getElementById('keyPoints').value.trim();
+
+            if (!apiKey) {
+                showError('Please enter your Gemini API key');
+                return;
+            }
+            
+            if (!title) {
+                showError('Please enter a video title');
+                return;
+            }
+
+            startTime = Date.now();
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ GENERATING...';
+
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('resultCard').classList.remove('show');
+            document.getElementById('status').innerHTML = '<div>🚀 Starting high-quality generation...</div>';
+            finalScript = '';
+
+            const chunks = [];
+
+            try {
+                updateStatus(`🎨 Part 1: Hook & Core Framework...`);
+                updateProgress(25);
+                
+                const prompt1 = buildPrompt1(title, coreInsight, keyPoints);
+                const chunk1 = await callGemini(prompt1);
+                chunks.push(chunk1);
+                updateStatus(`✅ Part 1 complete: ${chunk1.length.toLocaleString()} chars`);
+                await new Promise(r => setTimeout(r, 1500));
+
+                updateStatus(`🎨 Part 2: Deep Insights & Examples...`);
+                updateProgress(50);
+                
+                const lastSentences = chunk1.split(/[.!?]/).filter(s => s.trim().length > 20).slice(-6).join('. ') + '.';
+                const prompt2 = buildPrompt2(title, lastSentences);
+                const chunk2 = await callGemini(prompt2);
+                chunks.push(chunk2);
+                updateStatus(`✅ Part 2 complete: ${chunk2.length.toLocaleString()} chars`);
+                await new Promise(r => setTimeout(r, 1500));
+
+                updateStatus(`🎨 Part 3: Implementation & Close...`);
+                updateProgress(75);
+                
+                const lastSentences2 = chunk2.split(/[.!?]/).filter(s => s.trim().length > 20).slice(-6).join('. ') + '.';
+                const prompt3 = buildPrompt3(title, lastSentences2);
+                const chunk3 = await callGemini(prompt3);
+                chunks.push(chunk3);
+                updateStatus(`✅ Part 3 complete: ${chunk3.length.toLocaleString()} chars`);
+
+                updateStatus(`🧹 Creating ONE seamless block...`);
+                updateProgress(90);
+                
+                finalScript = chunks.join('\n\n');
+                finalScript = cleanChunkArtifacts(finalScript);
+                
+                const totalTime = Math.round((Date.now() - startTime) / 1000);
+                const totalWords = Math.round(finalScript.length / 4.6);
+
+                document.getElementById('charCount').textContent = finalScript.length.toLocaleString();
+                document.getElementById('wordCount').textContent = totalWords.toLocaleString();
+                document.getElementById('timeCount').textContent = totalTime + 's';
+                
+                updateProgress(100);
+                updateStatus(`🎉 Complete! ${finalScript.length.toLocaleString()} characters in ${totalTime}s`);
+                updateStatus(`✅ High-quality, educational, voice-ready!`);
+                
+                document.getElementById('resultCard').classList.add('show');
+
+            } catch (error) {
+                updateStatus(`❌ ERROR: ${error.message}`);
+                showError(error.message);
+                console.error(error);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 GENERATE HIGH-QUALITY SCRIPT';
+            }
+        }
+
+        function buildPrompt1(title, coreInsight, keyPoints) {
+            const targetChars = Math.floor(selectedLength / 3);
+            
+            return `You are an ELITE trading education scriptwriter. Your style is inspired by the best financial education content - focused, insightful, professional, and deeply valuable.
+
+WRITING QUALITY STANDARDS:
+- Educational FIRST, promotional SECOND
+- Every paragraph teaches something concrete
+- Use real trader examples (Ed Seykota, Jesse Livermore, Paul Tudor Jones, etc.)
+- Explain WHY things work, not just WHAT to do
+- Professional tone - confident but not salesy
+- Vary sentence structure naturally
+- NO melodrama or manipulation
+- Focus on practical insights viewers can immediately apply
+
+🎯 TARGET: ${targetChars.toLocaleString()} characters MINIMUM for this section
+
+TITLE: "${title}"
+
+${coreInsight ? `CORE INSIGHT: ${coreInsight}` : 'CREATE a powerful counterintuitive insight that challenges common trading beliefs'}
+
+${keyPoints ? `KEY POINTS TO COVER:\n${keyPoints}` : ''}
+
+PRODUCT (integrate naturally, NOT heavy-handed):
+${PRODUCT.name}
+${PRODUCT.tagline}
+
+STRUCTURE FOR SECTION 1:
+
+**HOOK (First 60-90 seconds)**
+Start with a counterintuitive statement that makes traders rethink their approach.
+Example format: "Every time you add a new setup, you reset your trading back to beginner level."
+Make them curious WHY this is true.
+
+**EARLY PRODUCT MENTION (Around 90-120s mark)**
+Subtle, natural integration:
+"This understanding - the psychological frameworks that separate the top 5% from everyone else - is exactly what you'll find inside ${PRODUCT.name}. Link in the description. But first, let me show you why this changes everything..."
+
+**CORE FRAMEWORK EXPLANATION**
+Identify the main psychological pattern or trading mistake:
+- Name it clearly (The Pattern Recognition Trap, The Edge Dilution Problem, etc.)
+- Explain the mechanism - WHY it happens
+- Use cognitive science or trading psychology principles
+- Show the progression from success to failure
+- Make it relatable - they've experienced this
+
+**LEGENDARY TRADER EXAMPLE - PART 1**
+Choose a real trader (Ed Seykota, Jesse Livermore, Paul Tudor Jones, etc.):
+- Their specific approach and what made them successful
+- ONE core principle they mastered
+- How focus/discipline was their key advantage
+- Set up their story (complete in later sections)
+
+CRITICAL QUALITY RULES:
+
+✅ EDUCATIONAL APPROACH:
+- Every paragraph should teach a specific insight
+- Focus on WHY things work, not just stating facts
+- Use real examples with specific details
+- Explain mechanisms and principles clearly
+- Give viewers actionable understanding
+
+✅ PROFESSIONAL TONE:
+- Confident without being arrogant
+- Factual without being boring
+- Engaging without manipulation
+- Respectful of viewer intelligence
+
+✅ NATURAL LANGUAGE:
+- Vary paragraph openings (never repeat transitions)
+- Mix short punchy sentences with detailed explanations
+- Use conversational but professional language
+- NO robotic phrases like "Let me tell you"
+- NO melodrama or fake urgency
+
+✅ TECHNICAL PRECISION:
+- Sentences under 25 words (aim for 12-18 average)
+- Specific numbers and examples
+- NO spacing errors or typos
+- NO placeholder text
+- Proofread every word
+
+❌ AVOID:
+- Manipulation or fear tactics
+- Repetitive emotional language
+- Overly salesy product mentions
+- Fake urgency or scarcity
+- Melodramatic storytelling
+- Robotic transitions
+
+${targetChars.toLocaleString()} characters MINIMUM. Write like Document 2 - educational, insightful, professional. GO:`;
+        }
+
+        function buildPrompt2(title, previousEnding) {
+            const targetChars = Math.floor(selectedLength / 3);
+            
+            return `Continue the high-quality trading education script SEAMLESSLY.
+
+🎯 TARGET: ${targetChars.toLocaleString()} characters MINIMUM
+
+TITLE: "${title}"
+
+PREVIOUS SECTION ENDED WITH:
+${previousEnding}
+
+CONTINUE NATURALLY. NO meta-commentary or artificial transitions.
+
+MAINTAIN DOCUMENT 2 QUALITY:
+- Educational focus with deep insights
+- Real trader examples with specific details
+- Professional tone throughout
+- Practical, actionable information
+- Natural language flow
+
+STRUCTURE FOR SECTION 2:
+
+**DEEP DIVE INTO THE PROBLEM**
+Explain exactly what happens when traders make this mistake:
+- The cognitive/psychological mechanism
+- How it progressively gets worse
+- Why smart people fall into this trap
+- The hidden costs they don't see
+- Specific metrics or examples
+
+**COMPARISON FRAMEWORK**
+"The difference is clear when you look at actual trading careers..."
+- Trader A approach (wrong way): specific behaviors and outcomes
+- Trader B approach (right way): specific behaviors and outcomes
+- Use realistic numbers and timeframes
+- Show the compounding effect over time
+- Make it about METHOD, not luck
+
+**REAL EXAMPLES AND DATA**
+Reference actual traders or verifiable patterns:
+- Ed Seykota's focus on trend following only
+- Paul Tudor Jones and his specific setups
+- William O'Neal and cup-and-handle bases
+- Mark Minervini and late-stage bases
+- Show their discipline and focus
+- Explain what made their edge work
+- Reference Market Wizards insights
+
+**THE EDGE CONDITIONS**
+Explain when and why trading edges actually work:
+- Market regime (trending vs ranging)
+- Volatility profiles (expanding vs compressing)
+- Why one setup can't work in all conditions
+- How specialists recognize their optimal conditions
+- The importance of waiting for your setup
+
+QUALITY STANDARDS:
+
+✅ EVERY paragraph must provide specific value:
+- Teach a principle
+- Explain a mechanism
+- Give a concrete example
+- Show cause and effect
+
+✅ PROFESSIONAL WRITING:
+- Vary sentence structure naturally
+- Mix explanation with examples
+- Keep it conversational but authoritative
+- Use specific details and numbers
+- Build understanding progressively
+
+✅ NO MANIPULATION:
+- No fear tactics or urgency
+- No repetitive emotional language
+- No fake stories or fabricated examples
+- Focus on EDUCATION not EMOTION
+
+${targetChars.toLocaleString()} characters MINIMUM. Maintain Document 2 quality. GO:`;
+        }
+
+        function buildPrompt3(title, previousEnding) {
+            const targetChars = Math.floor(selectedLength / 3);
+            
+            return `Complete the final section of this high-quality trading education script SEAMLESSLY.
+
+🎯 TARGET: ${targetChars.toLocaleString()} characters MINIMUM
+
+TITLE: "${title}"
+
+PREVIOUS SECTION ENDED WITH:
+${previousEnding}
+
+CONTINUE NATURALLY. Complete all threads professionally.
+
+PRODUCT FOR NATURAL INTEGRATION:
+${PRODUCT.name}
+${PRODUCT.tagline}
+Price: ${PRODUCT.price}
+Value: ${PRODUCT.value}
+
+MAINTAIN DOCUMENT 2 QUALITY THROUGHOUT:
+- Educational and valuable to the end
+- Professional, not salesy
+- Specific, actionable advice
+- Natural product integration
+
+STRUCTURE FOR FINAL SECTION:
+
+**THE MASTERY INSIGHT**
+Tie everything together with the key realization:
+- Why focus beats diversification in trading
+- The pattern recognition advantage of specialists
+- How 1,000 reps of one thing beats 100 reps of ten things
+- Reference Bruce Lee quote about practicing one kick 10,000 times
+- Show the compounding advantage of deep expertise
+
+**PRACTICAL IMPLEMENTATION**
+Give specific, actionable steps:
+
+STEP 1: Choose Your ONE Setup
+- Action: Select single high-probability pattern based on your personality
+- Why: Deep expertise beats surface knowledge across multiple setups
+- How: Research patterns, backtest, choose what resonates
+- Example: Breakouts, reversals, order blocks, etc.
+- Timeframe: Take 1 week to research and decide
+
+STEP 2: Build Your Pattern Database
+- Action: Study 100+ examples of your chosen setup in different conditions
+- Why: Develop pattern recognition and understand edge conditions
+- How: Backtest charts, journal observations, note what works
+- Example: See setup in uptrends, downtrends, ranging markets
+- Timeframe: 30-60 days of focused study
+
+STEP 3: Execute With Discipline
+- Action: Trade ONLY your setup when conditions align
+- Why: Consistency allows statistical edge to play out
+- How: Same risk per trade, same entry criteria, same management
+- Example: 0.5-1% risk, 100+ trades to evaluate edge
+- Timeframe: 90+ days minimum
+
+**REALISTIC EXPECTATIONS**
+Set proper mindset:
+- Most time is spent waiting for your setup
+- Miss lots of trades - that's the point
+- Small sample sizes mean nothing
+- Edge reveals itself over 100+ trades
+- Patience and discipline matter more than intelligence
+
+**CONTRAST THE TWO PATHS**
+Show the difference clearly:
+- Path A: Trading 10 setups, always active, pattern recognition at beginner level
+- Path B: Trading 1 setup, mostly waiting, pattern recognition at expert level
+- Make it clear which leads to profitability
+
+**NATURAL PRODUCT INTEGRATION**
+Don't make it heavy-handed or desperate:
+
+"Look, understanding this conceptually and actually implementing it are two different things. The psychological discipline required to focus on one setup while the market throws opportunities at you constantly - that's the real challenge.
+
+Inside ${PRODUCT.name}, you get the complete mental framework for this kind of trading discipline. Premium psychology audiobooks that rewire your mindset. Frameworks that help you resist overtrading. Documents that address every mental trap that pulls traders away from their edge. Elite mental resources used by consistently profitable traders.
+
+Right now, the complete system is ${PRODUCT.price}. That's less than one impulsive trade outside your setup. Check the link in the description.
+
+But here's the thing - the information alone isn't enough. You have to commit to the process. Pick your setup, study it obsessively, execute it with discipline. That's how you join the traders who actually make money consistently.
+
+If this helped shift your perspective on trading, hit subscribe. Let's build real edge together. See you in the next one."
+
+FINAL QUALITY CHECKS:
+
+✅ EDUCATIONAL VALUE:
+- Every section teaches something useful
+- Viewers leave with actionable insights
+- Focus on HELPING not SELLING
+- Professional throughout
+
+✅ NATURAL FLOW:
+- No artificial urgency
+- Product mention feels helpful, not pushy
+- Tone stays consistent
+- Proper conclusion that ties everything together
+
+✅ TECHNICAL PRECISION:
+- Clean, clear sentences
+- No typos or errors
+- Specific examples and numbers
+- Professional language
+
+❌ AVOID:
+- Desperate sales language
+- Manipulation or fear tactics
+- Overpromising results
+- Fake urgency or scarcity
+- Breaking the professional tone
+
+${targetChars.toLocaleString()} characters MINIMUM. Complete the script with Document 2 quality. GO:`;
+        }
+
+        function downloadScript() {
+            if (!finalScript) {
+                alert('No script to download!');
+                return;
+            }
+
+            const title = document.getElementById('videoTitle').value.trim() || 'trading_script';
+            const safeTitle = title.replace(/[^a-z0-9]/gi, '_').toLowerCase().substring(0, 50);
+            const filename = `${safeTitle}_high_quality_${Date.now()}.txt`;
+            
+            const statsHeader = `═══════════════════════════════════════
+ELITE TRADING SCRIPT - HIGH QUALITY MODE
+═══════════════════════════════════════
+Title: ${title}
+Generated: ${new Date().toLocaleString()}
+Characters: ${finalScript.length.toLocaleString()}
+Words: ${Math.round(finalScript.length / 4.6).toLocaleString()}
+Duration: ~${Math.round(finalScript.length / 1400)} minutes
+
+Product: ${PRODUCT.name}
+Quality: Document 2 Standard (Educational Focus)
+Format: ONE seamless block
+Status: ✅ Voice-ready
+═══════════════════════════════════════
+
+${finalScript}`;
+
+            const blob = new Blob([statsHeader], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            updateStatus(`📥 Downloaded: ${filename}`);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            selectLength(60000, document.querySelector('.length-option.selected'));
+        });
+    </script>
+</body>
+</html>
