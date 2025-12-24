@@ -363,10 +363,10 @@
                     <h3>💎 Fixed Product</h3>
                     <div class="info-box">
                         <strong>THE 7-FIGURE TRADER'S MIND VAULT</strong><br><br>
-                        Proven Psychology & Strategies to Transform Your Trading Forever<br><br>
-                        ✅ Natural integration<br>
-                        ✅ Subtle early mention<br>
-                        ✅ Strong value-based CTA
+                        The Complete Psychology System That Separates The Top 5% From Everyone Else<br><br>
+                        ✅ NO price mention (creates mystery)<br>
+                        ✅ Massive desire & curiosity<br>
+                        ✅ Forces description click
                     </div>
                 </div>
             </div>
@@ -391,15 +391,15 @@
                     </div>
 
                     <div class="info-box">
-                        <strong>🤖 AI Will Create (HIGH QUALITY MODE):</strong><br>
-                        ✅ Powerful counterintuitive hook<br>
+                        <strong>🤖 AI Will Create (MAXIMUM QUALITY MODE):</strong><br>
+                        ✅ Intelligent narrative approach selection<br>
                         ✅ Deep psychological frameworks<br>
-                        ✅ Real trader examples (Ed Seykota, Jesse Livermore, etc)<br>
-                        ✅ Practical, actionable insights<br>
-                        ✅ Specific implementation steps<br>
-                        ✅ Natural product integration<br>
-                        ✅ Educational-first approach (like Document 2)<br>
-                        ✅ ONE seamless block output
+                        ✅ Real trader examples (Seykota, Livermore, Tudor Jones)<br>
+                        ✅ Specific implementation steps with numbers<br>
+                        ✅ Product CTA with MASSIVE desire (NO PRICE)<br>
+                        ✅ Educational-first approach (reference quality)<br>
+                        ✅ Auto-cleaning of artifacts & price mentions<br>
+                        ✅ Quality validation & scoring
                     </div>
 
                     <button class="btn" id="generateBtn" onclick="generateScript()">🚀 GENERATE HIGH-QUALITY SCRIPT</button>
@@ -451,9 +451,8 @@
 
         const PRODUCT = {
             name: "THE 7-FIGURE TRADER'S MIND VAULT",
-            tagline: "Proven Psychology & Strategies to Transform Your Trading Forever",
-            price: "$67 (Launch Price)",
-            value: "Complete trading psychology transformation system with premium audiobooks, mindset frameworks, psychology fix documents, elite mental edge resources, and proven strategy guides."
+            tagline: "The Complete Psychology System That Separates The Top 5% From Everyone Else",
+            value: "Everything the elite traders studied to master their psychology - the frameworks, the audiobooks, the mental systems that turned struggling traders into consistent winners."
         };
 
         function selectLength(length, element) {
@@ -488,10 +487,10 @@
             setTimeout(() => errorBox.classList.remove('show'), 8000);
         }
 
-        async function callGemini(prompt, retryCount = 0) {
+        async function callGemini(prompt, temperature = 0.85, retryCount = 0) {
             const apiKey = document.getElementById('apiKey').value;
             const maxRetries = 3;
-            
+
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
                     method: 'POST',
@@ -499,7 +498,7 @@
                     body: JSON.stringify({
                         contents: [{ parts: [{ text: prompt }] }],
                         generationConfig: {
-                            temperature: 0.85,
+                            temperature: temperature,
                             maxOutputTokens: 65536,
                             topP: 0.92,
                             topK: 35
@@ -512,7 +511,7 @@
                         const waitTime = Math.pow(2, retryCount) * 5;
                         updateStatus(`⏳ Rate limit, waiting ${waitTime}s (retry ${retryCount + 1}/${maxRetries})...`);
                         await new Promise(r => setTimeout(r, waitTime * 1000));
-                        return callGemini(prompt, retryCount + 1);
+                        return callGemini(prompt, temperature, retryCount + 1);
                     }
                     throw new Error('Rate limit exceeded. Wait 60 seconds and try again.');
                 }
@@ -526,13 +525,13 @@
                 if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
                     throw new Error('Invalid API response');
                 }
-                
+
                 return data.candidates[0].content.parts[0].text.trim();
             } catch (error) {
                 if (retryCount < maxRetries && error.message.includes('fetch')) {
                     updateStatus(`⚠️ Network error, retrying (${retryCount + 1}/${maxRetries})...`);
                     await new Promise(r => setTimeout(r, 2000));
-                    return callGemini(prompt, retryCount + 1);
+                    return callGemini(prompt, temperature, retryCount + 1);
                 }
                 throw error;
             }
@@ -548,8 +547,120 @@
             text = text.replace(/Let me continue.*/gi, '');
             text = text.replace(/Continuing from.*/gi, '');
             text = text.replace(/\n{4,}/g, '\n\n\n');
-            
+
             return text.trim();
+        }
+
+        function cleanScript(text) {
+            // Remove chunk artifacts
+            text = text.replace(/📝.*?CONTINUE.*?\n/gi, '');
+            text = text.replace(/\*\*CHUNK.*?\*\*/gi, '');
+            text = text.replace(/Continue seamlessly.*?\n/gi, '');
+            text = text.replace(/Continuing from.*?\n/gi, '');
+            text = text.replace(/In the previous section.*?\./gi, '');
+            text = text.replace(/As we discussed.*?\./gi, '');
+            text = text.replace(/As mentioned.*?\./gi, '');
+
+            // Remove any price mentions that slipped through (CRITICAL)
+            text = text.replace(/\$\d+/g, '');
+            text = text.replace(/\d+\s*dollars?/gi, '');
+            text = text.replace(/\b(price|cost|afford|cheap|expensive|discount|sale)\b/gi, '');
+
+            // Fix spacing issues
+            text = text.replace(/\n{4,}/g, '\n\n\n');
+            text = text.replace(/  +/g, ' ');
+
+            // Remove any remaining asterisks placeholders
+            text = text.replace(/\*asterisk\*/gi, '');
+
+            // Fix common errors
+            text = text.replace(/sevenf figureure/g, 'seven-figure');
+            text = text.replace(/rugible/g, 'regrettable');
+            text = text.replace(/sestyme/g, 'system');
+
+            return text.trim();
+        }
+
+        function selectNarrativeApproach(title) {
+            const lowerTitle = title.toLowerCase();
+
+            // Journey/Transformation topics
+            if (lowerTitle.includes('quit') || lowerTitle.includes('fail') ||
+                lowerTitle.includes('journey') || lowerTitle.includes('transformation') ||
+                lowerTitle.includes('moment') || lowerTitle.includes('suffer')) {
+                return 'JOURNEY';
+            }
+
+            // Counterintuitive/Paradox topics
+            if ((lowerTitle.includes('why') || lowerTitle.includes('celebrating')) &&
+                (lowerTitle.includes('but') || lowerTitle.includes('actually') ||
+                 lowerTitle.includes('lose') || lowerTitle.includes('sounds insane'))) {
+                return 'PARADOX';
+            }
+
+            // Problem/Solution topics
+            if (lowerTitle.includes('stop') || lowerTitle.includes('avoid') ||
+                lowerTitle.includes('mistake') || lowerTitle.includes('95%') ||
+                (lowerTitle.includes('why') && lowerTitle.includes('traders'))) {
+                return 'PROBLEM_SOLUTION';
+            }
+
+            // Default to educational framework
+            return 'FRAMEWORK';
+        }
+
+        function validateQuality(script) {
+            const issues = [];
+
+            // Check for asterisks
+            if (script.includes('asterisk')) {
+                issues.push('Contains asterisk placeholders');
+            }
+
+            // Check for price mentions (CRITICAL)
+            if (/\$\d+|\d+\s*dollars?|price|cost/i.test(script)) {
+                issues.push('⚠️ CRITICAL: Contains price mention - auto-cleaning...');
+                // Auto-clean
+                script = script.replace(/\$\d+/g, '');
+                script = script.replace(/\d+\s*dollars?/gi, '');
+                script = script.replace(/\b(price|cost)\b/gi, '');
+            }
+
+            // Check for repetitive transitions
+            const transitions = ['let me tell you', 'here\'s the thing', 'the truth is'];
+            transitions.forEach(phrase => {
+                const count = (script.toLowerCase().match(new RegExp(phrase, 'g')) || []).length;
+                if (count > 2) {
+                    issues.push(`Repetitive phrase: "${phrase}" appears ${count} times`);
+                }
+            });
+
+            // Check for meta-commentary
+            if (script.includes('continue') && script.includes('previous')) {
+                issues.push('Contains chunk artifacts');
+            }
+
+            // Check for sales language
+            const salesTerms = ['buy now', 'limited time', 'discount', 'special offer', 'act now'];
+            salesTerms.forEach(term => {
+                if (script.toLowerCase().includes(term)) {
+                    issues.push(`Sales language detected: "${term}"`);
+                }
+            });
+
+            // Check for quality markers
+            const hasNumbers = /\$[\d,]+/.test(script) || /\d+%/.test(script);
+            const hasRealTraders = /(Livermore|Seykota|Tudor Jones|Minervini|O'Neil)/i.test(script);
+
+            if (!hasNumbers) issues.push('Consider adding specific dollar amounts or percentages');
+            if (!hasRealTraders) issues.push('Consider adding real trader examples');
+
+            return {
+                clean: issues.length === 0,
+                issues: issues,
+                quality: issues.length === 0 ? 'HIGH' : issues.length < 3 ? 'MEDIUM' : 'LOW',
+                script: script
+            };
         }
 
         async function generateScript() {
@@ -581,51 +692,68 @@
             const chunks = [];
 
             try {
+                // Detect narrative approach
+                const approach = selectNarrativeApproach(title);
+                updateStatus(`🧠 Narrative approach: ${approach}`);
+
                 updateStatus(`🎨 Part 1: Hook & Core Framework...`);
                 updateProgress(25);
-                
-                const prompt1 = buildPrompt1(title, coreInsight, keyPoints);
-                const chunk1 = await callGemini(prompt1);
+
+                const prompt1 = buildPrompt1(title, coreInsight, keyPoints, approach);
+                const chunk1 = await callGemini(prompt1, 0.90);  // Higher creativity for hook
                 chunks.push(chunk1);
                 updateStatus(`✅ Part 1 complete: ${chunk1.length.toLocaleString()} chars`);
                 await new Promise(r => setTimeout(r, 1500));
 
                 updateStatus(`🎨 Part 2: Deep Insights & Examples...`);
                 updateProgress(50);
-                
-                const lastSentences = chunk1.split(/[.!?]/).filter(s => s.trim().length > 20).slice(-6).join('. ') + '.';
-                const prompt2 = buildPrompt2(title, lastSentences);
-                const chunk2 = await callGemini(prompt2);
+
+                const lastSentences = chunk1.split(/[.!?]/).filter(s => s.trim().length > 20).slice(-4).join('. ') + '.';
+                const prompt2 = buildPrompt2(title, lastSentences, approach);
+                const chunk2 = await callGemini(prompt2, 0.85);  // Balanced
                 chunks.push(chunk2);
                 updateStatus(`✅ Part 2 complete: ${chunk2.length.toLocaleString()} chars`);
                 await new Promise(r => setTimeout(r, 1500));
 
                 updateStatus(`🎨 Part 3: Implementation & Close...`);
                 updateProgress(75);
-                
-                const lastSentences2 = chunk2.split(/[.!?]/).filter(s => s.trim().length > 20).slice(-6).join('. ') + '.';
-                const prompt3 = buildPrompt3(title, lastSentences2);
-                const chunk3 = await callGemini(prompt3);
+
+                const lastSentences2 = chunk2.split(/[.!?]/).filter(s => s.trim().length > 20).slice(-4).join('. ') + '.';
+                const prompt3 = buildPrompt3(title, lastSentences2, approach);
+                const chunk3 = await callGemini(prompt3, 0.80);  // Lower for focused close
                 chunks.push(chunk3);
                 updateStatus(`✅ Part 3 complete: ${chunk3.length.toLocaleString()} chars`);
 
                 updateStatus(`🧹 Creating ONE seamless block...`);
-                updateProgress(90);
-                
+                updateProgress(85);
+
                 finalScript = chunks.join('\n\n');
-                finalScript = cleanChunkArtifacts(finalScript);
-                
+                finalScript = cleanScript(finalScript);
+
+                updateStatus(`🔍 Validating quality & removing price mentions...`);
+                updateProgress(92);
+
+                const validation = validateQuality(finalScript);
+                finalScript = validation.script;
+
+                if (validation.issues.length > 0) {
+                    updateStatus(`⚠️ Quality Check: ${validation.quality}`);
+                    validation.issues.forEach(issue => updateStatus(`  - ${issue}`));
+                } else {
+                    updateStatus(`✅ Quality Check: ${validation.quality} - Perfect!`);
+                }
+
                 const totalTime = Math.round((Date.now() - startTime) / 1000);
                 const totalWords = Math.round(finalScript.length / 4.6);
 
                 document.getElementById('charCount').textContent = finalScript.length.toLocaleString();
                 document.getElementById('wordCount').textContent = totalWords.toLocaleString();
                 document.getElementById('timeCount').textContent = totalTime + 's';
-                
+
                 updateProgress(100);
                 updateStatus(`🎉 Complete! ${finalScript.length.toLocaleString()} characters in ${totalTime}s`);
-                updateStatus(`✅ High-quality, educational, voice-ready!`);
-                
+                updateStatus(`✅ High-quality, educational, voice-ready, NO PRICE MENTIONS!`);
+
                 document.getElementById('resultCard').classList.add('show');
 
             } catch (error) {
@@ -638,295 +766,236 @@
             }
         }
 
-        function buildPrompt1(title, coreInsight, keyPoints) {
+        function buildPrompt1(title, coreInsight, keyPoints, approach) {
             const targetChars = Math.floor(selectedLength / 3);
-            
-            return `You are an ELITE trading education scriptwriter. Your style is inspired by the best financial education content - focused, insightful, professional, and deeply valuable.
 
-WRITING QUALITY STANDARDS:
-- Educational FIRST, promotional SECOND
-- Every paragraph teaches something concrete
-- Use real trader examples (Ed Seykota, Jesse Livermore, Paul Tudor Jones, etc.)
-- Explain WHY things work, not just WHAT to do
-- Professional tone - confident but not salesy
-- Vary sentence structure naturally
-- NO melodrama or manipulation
-- Focus on practical insights viewers can immediately apply
+            return `You are an elite trading education scriptwriter. Study these reference examples:
 
-🎯 TARGET: ${targetChars.toLocaleString()} characters MINIMUM for this section
+REFERENCE STYLE - Notice the professional, educational quality:
+
+"95% of traders lose money. But the reason isn't what most people think.
+
+It's not because they lack intelligence. It's not because they don't have access to information. Every struggling trader I've worked with has had access to the same charts, the same indicators, the same patterns as successful traders.
+
+The difference comes down to something most traders never address. A psychological pattern so fundamental that until you recognize it, consistent profitability remains out of reach.
+
+Smart money trades liquidity. They understand that every major move requires fuel - retail traders positioned on the wrong side. This isn't theory. This is how markets actually work. Professional traders identify where retail stops cluster, where breakout buyers will enter, where weak hands will panic exit. Then they trade the opposite side.
+
+Retail traders do the exact opposite. They chase breakouts after the move is exhausted. They place stops exactly where everyone else does. They enter when the setup looks 'obvious' - which means smart money has already positioned and is now looking to exit into their orders."
+
+Notice: Clean language, specific insights, educational focus, no manipulation.
 
 TITLE: "${title}"
+${coreInsight ? `CORE INSIGHT: ${coreInsight}` : ''}
+${keyPoints ? `KEY POINTS:\n${keyPoints}` : ''}
 
-${coreInsight ? `CORE INSIGHT: ${coreInsight}` : 'CREATE a powerful counterintuitive insight that challenges common trading beliefs'}
+NARRATIVE APPROACH: ${approach}
+${approach === 'PARADOX' ? '(Use counterintuitive hook like "Celebrating when you lose money...")' : ''}
+${approach === 'JOURNEY' ? '(Use personal transformation narrative like "Most traders like to talk about their wins...")' : ''}
+${approach === 'PROBLEM_SOLUTION' ? '(Use direct problem analysis like "95% of traders lose money...")' : ''}
 
-${keyPoints ? `KEY POINTS TO COVER:\n${keyPoints}` : ''}
+TARGET: ${targetChars.toLocaleString()} characters MINIMUM
 
-PRODUCT (integrate naturally, NOT heavy-handed):
+PRODUCT (integrate ONLY if natural - build MASSIVE desire, ZERO price mention):
 ${PRODUCT.name}
 ${PRODUCT.tagline}
+${PRODUCT.value}
 
-STRUCTURE FOR SECTION 1:
+PRODUCT INTEGRATION MASTERY (when you mention it):
+✅ Frame as WHAT THE ELITE ACTUALLY STUDY
+✅ Contrast with what amateurs chase (indicators, signals)
+✅ Create curiosity: "This is what you'll discover inside..."
+✅ Positioning: "The frameworks that turned struggling traders into consistent winners"
+✅ Authority: "What every 7-figure trader has studied and mastered"
+✅ Exclusivity: "The mental systems most traders never even know exist"
+✅ End with: "Link in the description" (NO price, NO urgency, just access)
 
-**HOOK (First 60-90 seconds)**
-Start with a counterintuitive statement that makes traders rethink their approach.
-Example format: "Every time you add a new setup, you reset your trading back to beginner level."
-Make them curious WHY this is true.
+FORBIDDEN PRODUCT LANGUAGE:
+❌ NO price mention (no $67, no "affordable", no cost talk)
+❌ NO "buy now", "limited time", "discount", "special offer"
+❌ NO desperate sales language
+❌ NO breaking educational tone
 
-**EARLY PRODUCT MENTION (Around 90-120s mark)**
-Subtle, natural integration:
-"This understanding - the psychological frameworks that separate the top 5% from everyone else - is exactly what you'll find inside ${PRODUCT.name}. Link in the description. But first, let me show you why this changes everything..."
+OPENING THIRD STRUCTURE:
+1. Hook immediately with counterintuitive truth or relatable problem
+2. Establish credibility through insight, not claims
+3. Present the core framework or psychological pattern
+4. Use specific examples (real traders or realistic scenarios with exact numbers)
+5. Build toward deeper exploration
+6. [OPTIONAL] Drop ONE product mention that creates massive curiosity
 
-**CORE FRAMEWORK EXPLANATION**
-Identify the main psychological pattern or trading mistake:
-- Name it clearly (The Pattern Recognition Trap, The Edge Dilution Problem, etc.)
-- Explain the mechanism - WHY it happens
-- Use cognitive science or trading psychology principles
-- Show the progression from success to failure
-- Make it relatable - they've experienced this
+QUALITY RULES:
+✅ Vary every paragraph opening (never repeat transitions)
+✅ Mix sentence lengths: short punches (6-10 words) + explanations (15-20 words)
+✅ Use specific numbers ($8,432 not "$8,000", "6 weeks" not "a while")
+✅ Educational tone - teaching not selling
+✅ Professional confidence without hype
+✅ Natural language - conversational but intelligent
+✅ Real trader examples when appropriate (Seykota, Livermore, Tudor Jones, Minervini, O'Neil)
+✅ Clean psychological frameworks explained clearly
 
-**LEGENDARY TRADER EXAMPLE - PART 1**
-Choose a real trader (Ed Seykota, Jesse Livermore, Paul Tudor Jones, etc.):
-- Their specific approach and what made them successful
-- ONE core principle they mastered
-- How focus/discipline was their key advantage
-- Set up their story (complete in later sections)
+❌ FORBIDDEN:
+❌ Asterisks or placeholder text
+❌ Repetitive phrases ("Let me tell you", "Here's the thing", etc.)
+❌ Fake urgency or scarcity tactics
+❌ Melodramatic language
+❌ Template-feel or robotic structure
+❌ Price mentions anywhere
+❌ Desperate sales language
+❌ Meta-commentary about the script itself
 
-CRITICAL QUALITY RULES:
+EXAMPLE PRODUCT MENTION (if natural and helpful):
+"This understanding - the psychological frameworks that separate the top 5% from the 95% who never make it - is exactly what you'll find inside ${PRODUCT.name}. The complete mental systems that elite traders actually study. Trading in the Zone, The Disciplined Trader, every framework that rewires how you think about risk, losses, and discipline. Link in the description. But first, let me show you exactly why this changes everything..."
 
-✅ EDUCATIONAL APPROACH:
-- Every paragraph should teach a specific insight
-- Focus on WHY things work, not just stating facts
-- Use real examples with specific details
-- Explain mechanisms and principles clearly
-- Give viewers actionable understanding
+Notice: NO price, creates curiosity, feels valuable not salesy.
 
-✅ PROFESSIONAL TONE:
-- Confident without being arrogant
-- Factual without being boring
-- Engaging without manipulation
-- Respectful of viewer intelligence
-
-✅ NATURAL LANGUAGE:
-- Vary paragraph openings (never repeat transitions)
-- Mix short punchy sentences with detailed explanations
-- Use conversational but professional language
-- NO robotic phrases like "Let me tell you"
-- NO melodrama or fake urgency
-
-✅ TECHNICAL PRECISION:
-- Sentences under 25 words (aim for 12-18 average)
-- Specific numbers and examples
-- NO spacing errors or typos
-- NO placeholder text
-- Proofread every word
-
-❌ AVOID:
-- Manipulation or fear tactics
-- Repetitive emotional language
-- Overly salesy product mentions
-- Fake urgency or scarcity
-- Melodramatic storytelling
-- Robotic transitions
-
-${targetChars.toLocaleString()} characters MINIMUM. Write like Document 2 - educational, insightful, professional. GO:`;
+Write ${targetChars.toLocaleString()} characters of pure educational value. Match the reference quality.`;
         }
 
-        function buildPrompt2(title, previousEnding) {
+        function buildPrompt2(title, previousEnding, approach) {
             const targetChars = Math.floor(selectedLength / 3);
-            
-            return `Continue the high-quality trading education script SEAMLESSLY.
 
-🎯 TARGET: ${targetChars.toLocaleString()} characters MINIMUM
+            return `Continue this trading education script SEAMLESSLY.
 
-TITLE: "${title}"
+REFERENCE QUALITY - Educational, insightful, professional.
 
-PREVIOUS SECTION ENDED WITH:
+PREVIOUS SECTION ENDED:
 ${previousEnding}
 
-CONTINUE NATURALLY. NO meta-commentary or artificial transitions.
+Continue naturally - NO meta-commentary, NO "continuing from", just flow.
 
-MAINTAIN DOCUMENT 2 QUALITY:
-- Educational focus with deep insights
-- Real trader examples with specific details
-- Professional tone throughout
-- Practical, actionable information
-- Natural language flow
+TARGET: ${targetChars.toLocaleString()} characters MINIMUM
 
-STRUCTURE FOR SECTION 2:
+NARRATIVE APPROACH: ${approach}
 
-**DEEP DIVE INTO THE PROBLEM**
-Explain exactly what happens when traders make this mistake:
-- The cognitive/psychological mechanism
-- How it progressively gets worse
-- Why smart people fall into this trap
-- The hidden costs they don't see
-- Specific metrics or examples
+MIDDLE SECTION SHOULD:
+1. Deepen the core insight with concrete examples
+2. Show contrast (what works vs what doesn't)
+3. Explain mechanisms and psychology clearly
+4. Use real trader stories or realistic comparisons with specific numbers
+5. Build toward practical implementation
+6. [OPTIONAL] Brief product callback IF fits naturally (NO PRICE)
 
-**COMPARISON FRAMEWORK**
-"The difference is clear when you look at actual trading careers..."
-- Trader A approach (wrong way): specific behaviors and outcomes
-- Trader B approach (right way): specific behaviors and outcomes
-- Use realistic numbers and timeframes
-- Show the compounding effect over time
-- Make it about METHOD, not luck
+PRODUCT CALLBACK (if natural, OPTIONAL):
+✅ Reference what elite traders studied vs what amateurs chase
+✅ Frame as "the systems that actually work"
+✅ Create desire through demonstration of value
+✅ NO price mention ever
+✅ Example: "This exact framework - the one consistently profitable traders use - is covered in ${PRODUCT.name}. The complete psychology system. Link in the description."
 
-**REAL EXAMPLES AND DATA**
-Reference actual traders or verifiable patterns:
-- Ed Seykota's focus on trend following only
-- Paul Tudor Jones and his specific setups
-- William O'Neal and cup-and-handle bases
-- Mark Minervini and late-stage bases
-- Show their discipline and focus
-- Explain what made their edge work
-- Reference Market Wizards insights
-
-**THE EDGE CONDITIONS**
-Explain when and why trading edges actually work:
-- Market regime (trending vs ranging)
-- Volatility profiles (expanding vs compressing)
-- Why one setup can't work in all conditions
-- How specialists recognize their optimal conditions
-- The importance of waiting for your setup
+CONTENT GUIDELINES:
+- Deep dive into the psychological/cognitive mechanism
+- Comparison framework: Trader A (wrong) vs Trader B (right) with specific outcomes
+- Real trader examples: Seykota, Livermore, Tudor Jones, Minervini, O'Neil
+- Explain edge conditions: market regimes, volatility, optimal conditions
+- Show progression and compounding effects with numbers
+- Make it about METHOD not luck
 
 QUALITY STANDARDS:
+✅ Educational and valuable every paragraph
+✅ Specific, actionable insights with real numbers
+✅ Professional tone without hype
+✅ Varied language and structure
+✅ Real examples and frameworks
+✅ No manipulation
+✅ NO price mention anywhere
 
-✅ EVERY paragraph must provide specific value:
-- Teach a principle
-- Explain a mechanism
-- Give a concrete example
-- Show cause and effect
+❌ FORBIDDEN:
+❌ Meta-commentary about script structure
+❌ "As I mentioned" or "continuing from"
+❌ Repetitive transitions
+❌ Fake urgency
+❌ Price mentions
+❌ Sales language
 
-✅ PROFESSIONAL WRITING:
-- Vary sentence structure naturally
-- Mix explanation with examples
-- Keep it conversational but authoritative
-- Use specific details and numbers
-- Build understanding progressively
-
-✅ NO MANIPULATION:
-- No fear tactics or urgency
-- No repetitive emotional language
-- No fake stories or fabricated examples
-- Focus on EDUCATION not EMOTION
-
-${targetChars.toLocaleString()} characters MINIMUM. Maintain Document 2 quality. GO:`;
+Write ${targetChars.toLocaleString()} characters continuing seamlessly with high educational value.`;
         }
 
-        function buildPrompt3(title, previousEnding) {
+        function buildPrompt3(title, previousEnding, approach) {
             const targetChars = Math.floor(selectedLength / 3);
-            
-            return `Complete the final section of this high-quality trading education script SEAMLESSLY.
 
-🎯 TARGET: ${targetChars.toLocaleString()} characters MINIMUM
+            return `Complete this trading education script professionally.
 
-TITLE: "${title}"
+REFERENCE QUALITY - Educational, professional, powerful close.
 
-PREVIOUS SECTION ENDED WITH:
+PREVIOUS SECTION ENDED:
 ${previousEnding}
 
-CONTINUE NATURALLY. Complete all threads professionally.
+Continue and COMPLETE naturally.
 
-PRODUCT FOR NATURAL INTEGRATION:
+TARGET: ${targetChars.toLocaleString()} characters MINIMUM
+
+NARRATIVE APPROACH: ${approach}
+
+PRODUCT FOR FINAL CTA:
 ${PRODUCT.name}
 ${PRODUCT.tagline}
-Price: ${PRODUCT.price}
-Value: ${PRODUCT.value}
+${PRODUCT.value}
 
-MAINTAIN DOCUMENT 2 QUALITY THROUGHOUT:
-- Educational and valuable to the end
-- Professional, not salesy
-- Specific, actionable advice
-- Natural product integration
+FINAL SECTION SHOULD:
+1. Provide specific implementation steps (actionable framework)
+2. Set realistic expectations and timeframes
+3. Contrast the two paths clearly
+4. Strong product CTA that creates DESIRE and CURIOSITY (NO PRICE)
+5. Value-focused close with subscribe CTA
 
-STRUCTURE FOR FINAL SECTION:
+IMPLEMENTATION FRAMEWORK (give specific steps):
+- Step 1: Specific action, why it works, how to do it, timeframe
+- Step 2: Specific action, why it works, how to do it, timeframe
+- Step 3: Specific action, why it works, how to do it, timeframe
+- Include realistic expectations (100+ trades, 90+ days, patience required)
 
-**THE MASTERY INSIGHT**
-Tie everything together with the key realization:
-- Why focus beats diversification in trading
-- The pattern recognition advantage of specialists
-- How 1,000 reps of one thing beats 100 reps of ten things
-- Reference Bruce Lee quote about practicing one kick 10,000 times
-- Show the compounding advantage of deep expertise
+PRODUCT FINAL CTA (MAXIMUM DESIRE, ZERO PRICE):
 
-**PRACTICAL IMPLEMENTATION**
-Give specific, actionable steps:
+Build massive value, create FOMO of missing out on knowledge, make description link irresistible.
 
-STEP 1: Choose Your ONE Setup
-- Action: Select single high-probability pattern based on your personality
-- Why: Deep expertise beats surface knowledge across multiple setups
-- How: Research patterns, backtest, choose what resonates
-- Example: Breakouts, reversals, order blocks, etc.
-- Timeframe: Take 1 week to research and decide
+APPROACH: List what's inside, contrast elite vs amateur, position as essential, create curiosity.
 
-STEP 2: Build Your Pattern Database
-- Action: Study 100+ examples of your chosen setup in different conditions
-- Why: Develop pattern recognition and understand edge conditions
-- How: Backtest charts, journal observations, note what works
-- Example: See setup in uptrends, downtrends, ranging markets
-- Timeframe: 30-60 days of focused study
+EXAMPLE STRUCTURE:
+"Look, you can keep doing what you've been doing and hope something changes. Keep chasing indicators while your account bleeds. Keep making the same psychological mistakes that destroy 95% of traders.
 
-STEP 3: Execute With Discipline
-- Action: Trade ONLY your setup when conditions align
-- Why: Consistency allows statistical edge to play out
-- How: Same risk per trade, same entry criteria, same management
-- Example: 0.5-1% risk, 100+ trades to evaluate edge
-- Timeframe: 90+ days minimum
+Or you can equip yourself with the same mental frameworks that 7-figure traders use every single day.
 
-**REALISTIC EXPECTATIONS**
-Set proper mindset:
-- Most time is spent waiting for your setup
-- Miss lots of trades - that's the point
-- Small sample sizes mean nothing
-- Edge reveals itself over 100+ trades
-- Patience and discipline matter more than intelligence
+Inside ${PRODUCT.name}, you get the complete psychology transformation system. Every framework that separates the top 5% from everyone else. Trading in the Zone. The Disciplined Trader. Market Wizards. Every mental system that elite traders studied to rewire their brains for consistency.
 
-**CONTRAST THE TWO PATHS**
-Show the difference clearly:
-- Path A: Trading 10 setups, always active, pattern recognition at beginner level
-- Path B: Trading 1 setup, mostly waiting, pattern recognition at expert level
-- Make it clear which leads to profitability
+The frameworks that turn emotional gamblers into disciplined professionals. The exact mental tools that make the difference between blowing up and compounding wealth.
 
-**NATURAL PRODUCT INTEGRATION**
-Don't make it heavy-handed or desperate:
+This is what the top 5% actually study while everyone else chases the next hot indicator.
 
-"Look, understanding this conceptually and actually implementing it are two different things. The psychological discipline required to focus on one setup while the market throws opportunities at you constantly - that's the real challenge.
+Link in the description. This is the difference between staying stuck and finally breaking through.
 
-Inside ${PRODUCT.name}, you get the complete mental framework for this kind of trading discipline. Premium psychology audiobooks that rewire your mindset. Frameworks that help you resist overtrading. Documents that address every mental trap that pulls traders away from their edge. Elite mental resources used by consistently profitable traders.
+If you got value from this, hit subscribe. Let me know in the comments what clicked for you. I'll see you in the next one."
 
-Right now, the complete system is ${PRODUCT.price}. That's less than one impulsive trade outside your setup. Check the link in the description.
+CRITICAL CTA RULES:
+✅ Build MASSIVE value (list what's inside: books, frameworks, systems)
+✅ Create FOMO (what top 5% study vs what amateurs chase)
+✅ Position as ESSENTIAL (difference between success and failure)
+✅ Authority (mention specific books/systems: Trading in the Zone, Disciplined Trader, Market Wizards)
+✅ Contrast (this vs staying stuck)
+✅ Simple CTA: "Link in the description"
+❌ NEVER mention price (creates mystery, forces click)
+❌ NO "buy now", "limited time", sales language
+❌ NO desperation or begging
 
-But here's the thing - the information alone isn't enough. You have to commit to the process. Pick your setup, study it obsessively, execute it with discipline. That's how you join the traders who actually make money consistently.
+ALTERNATIVE: If topic doesn't fit product well, do pure value close with just subscribe CTA.
 
-If this helped shift your perspective on trading, hit subscribe. Let's build real edge together. See you in the next one."
+QUALITY STANDARDS:
+✅ Educational and valuable throughout
+✅ Specific implementation steps with numbers
+✅ Professional tone maintained
+✅ Natural product integration that feels helpful
+✅ Strong close that ties everything together
+✅ NO price mention anywhere
 
-FINAL QUALITY CHECKS:
+❌ FORBIDDEN:
+❌ Price mentions
+❌ "Buy now" or sales pressure
+❌ Fake urgency
+❌ Breaking educational tone
+❌ Overpromising results
+❌ Desperate language
 
-✅ EDUCATIONAL VALUE:
-- Every section teaches something useful
-- Viewers leave with actionable insights
-- Focus on HELPING not SELLING
-- Professional throughout
-
-✅ NATURAL FLOW:
-- No artificial urgency
-- Product mention feels helpful, not pushy
-- Tone stays consistent
-- Proper conclusion that ties everything together
-
-✅ TECHNICAL PRECISION:
-- Clean, clear sentences
-- No typos or errors
-- Specific examples and numbers
-- Professional language
-
-❌ AVOID:
-- Desperate sales language
-- Manipulation or fear tactics
-- Overpromising results
-- Fake urgency or scarcity
-- Breaking the professional tone
-
-${targetChars.toLocaleString()} characters MINIMUM. Complete the script with Document 2 quality. GO:`;
+Write ${targetChars.toLocaleString()} characters completing the script powerfully with NO PRICE MENTION.`;
         }
 
         function downloadScript() {
@@ -949,9 +1018,10 @@ Words: ${Math.round(finalScript.length / 4.6).toLocaleString()}
 Duration: ~${Math.round(finalScript.length / 1400)} minutes
 
 Product: ${PRODUCT.name}
-Quality: Document 2 Standard (Educational Focus)
+${PRODUCT.tagline}
+Quality: Reference Standard (Educational Focus)
 Format: ONE seamless block
-Status: ✅ Voice-ready
+Status: ✅ Voice-ready, NO PRICE MENTIONS
 ═══════════════════════════════════════
 
 ${finalScript}`;
