@@ -796,17 +796,31 @@
 
                 try {
                     const imagePromptRequest = buildImagePromptRequest(title, finalScript);
+                    console.log('🎨 Starting image prompt generation...');
                     await new Promise(r => setTimeout(r, 1500)); // Rate limit pause
                     finalImagePrompts = await callGemini(imagePromptRequest, 0.75);
+                    console.log('✅ Image prompts received, length:', finalImagePrompts.length);
 
                     updateStatus(`✅ Image prompts generated successfully!`);
                     updateStatus(`🎨 6 prompts ready: 1 Thumbnail + 5 Scene Illustrations`);
 
                     // Show the image prompts download button
-                    document.getElementById('downloadImageBtn').style.display = 'block';
+                    const downloadBtn = document.getElementById('downloadImageBtn');
+                    downloadBtn.style.display = 'block';
+                    downloadBtn.textContent = '🎨 DOWNLOAD AI IMAGE PROMPTS (6 Prompts)';
+                    downloadBtn.disabled = false;
                 } catch (imageError) {
+                    console.error('❌ Image generation error:', imageError);
                     updateStatus(`⚠️ Image prompt generation failed: ${imageError.message}`);
-                    updateStatus(`✅ Script generation successful - image prompts optional`);
+                    updateStatus(`💡 Tip: Check API key rate limits (15 RPM free tier)`);
+                    updateStatus(`✅ Script generation successful - you can retry for images`);
+
+                    // Show button but disabled with error message
+                    const downloadBtn = document.getElementById('downloadImageBtn');
+                    downloadBtn.style.display = 'block';
+                    downloadBtn.textContent = '⚠️ Image Generation Failed - Retry Script Generation';
+                    downloadBtn.disabled = true;
+                    downloadBtn.style.opacity = '0.6';
                     // Don't fail the whole process if image generation fails
                 }
 
@@ -1276,14 +1290,18 @@ ${finalScript}`;
         }
 
         function downloadImagePrompts() {
+            console.log('📥 Download image prompts clicked');
+            console.log('📝 finalImagePrompts length:', finalImagePrompts ? finalImagePrompts.length : 0);
+
             if (!finalImagePrompts) {
-                alert('No image prompts to download!');
+                alert('No image prompts to download! Please generate a script first.');
                 return;
             }
 
             const title = document.getElementById('videoTitle').value.trim() || 'trading_script';
             const safeTitle = title.replace(/[^a-z0-9]/gi, '_').toLowerCase().substring(0, 50);
             const filename = `image_prompts_${safeTitle}_${Date.now()}.txt`;
+            console.log('📂 Creating file:', filename);
 
             const imagePromptsHeader = `═══════════════════════════════════════
 AI IMAGE GENERATION PROMPTS
