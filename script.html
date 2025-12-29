@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎬 Elite Trading Script Generator V2 - Maximum Quality</title>
+    <title>🎬 Elite Trading Script Generator V3 - With Image Prompts</title>
     <style>
         * {
             margin: 0;
@@ -308,13 +308,14 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎬 ELITE TRADING SCRIPT GENERATOR V2</h1>
-            <p class="subtitle">Gemini 2.5 Flash • Maximum Quality Mode • Voice-Ready</p>
+            <h1>🎬 ELITE TRADING SCRIPT GENERATOR V3</h1>
+            <p class="subtitle">Gemini 2.5 Flash • Maximum Quality Mode • Voice-Ready • AI Image Prompts</p>
             <div class="badge-row">
                 <span class="badge">🎤 Voice Ready</span>
                 <span class="badge">📊 Educational Focus</span>
                 <span class="badge">🚀 3-Part System</span>
                 <span class="badge">💎 Ultra High Quality</span>
+                <span class="badge">🎨 6 AI Image Prompts</span>
             </div>
         </div>
 
@@ -329,7 +330,8 @@
                     <div class="info-box">
                         <strong>Get Free API:</strong> ai.google.dev<br>
                         <strong>Free Tier:</strong> 15 RPM, 1,500 RPD<br>
-                        <strong>This tool:</strong> 3 optimized API calls
+                        <strong>This tool:</strong> 4 optimized API calls<br>
+                        (3 for script + 1 for image prompts)
                     </div>
                 </div>
 
@@ -399,7 +401,8 @@
                         ✅ Product CTA with MASSIVE desire (NO PRICE)<br>
                         ✅ Educational-first approach (reference quality)<br>
                         ✅ Auto-cleaning of artifacts & price mentions<br>
-                        ✅ Quality validation & scoring
+                        ✅ Quality validation & scoring<br>
+                        🎨 <strong>BONUS:</strong> 6 AI image prompts (thumbnail + 5 scenes)
                     </div>
 
                     <button class="btn" id="generateBtn" onclick="generateScript()">🚀 GENERATE HIGH-QUALITY SCRIPT</button>
@@ -436,8 +439,12 @@
                         </div>
                     </div>
 
-                    <button class="btn download-btn" onclick="downloadScript()">
+                    <button class="btn download-btn" onclick="downloadScript()" style="margin-bottom: 15px;">
                         📥 DOWNLOAD VOICE-READY SCRIPT
+                    </button>
+
+                    <button class="btn download-btn" onclick="downloadImagePrompts()" id="downloadImageBtn" style="display: none; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                        🎨 DOWNLOAD AI IMAGE PROMPTS (6 Prompts)
                     </button>
                 </div>
             </div>
@@ -447,6 +454,7 @@
     <script>
         let selectedLength = 60000;
         let finalScript = '';
+        let finalImagePrompts = '';
         let startTime = 0;
 
         const PRODUCT = {
@@ -718,6 +726,8 @@
             document.getElementById('resultCard').classList.remove('show');
             document.getElementById('status').innerHTML = '<div>🚀 Starting high-quality generation...</div>';
             finalScript = '';
+            finalImagePrompts = '';
+            document.getElementById('downloadImageBtn').style.display = 'none';
 
             const chunks = [];
 
@@ -779,6 +789,40 @@
                 document.getElementById('charCount').textContent = finalScript.length.toLocaleString();
                 document.getElementById('wordCount').textContent = totalWords.toLocaleString();
                 document.getElementById('timeCount').textContent = totalTime + 's';
+
+                // Generate AI Image Prompts (4th API call)
+                updateStatus(`🎨 Generating 6 AI image prompts...`);
+                updateProgress(95);
+
+                try {
+                    const imagePromptRequest = buildImagePromptRequest(title, finalScript);
+                    console.log('🎨 Starting image prompt generation...');
+                    await new Promise(r => setTimeout(r, 1500)); // Rate limit pause
+                    finalImagePrompts = await callGemini(imagePromptRequest, 0.75);
+                    console.log('✅ Image prompts received, length:', finalImagePrompts.length);
+
+                    updateStatus(`✅ Image prompts generated successfully!`);
+                    updateStatus(`🎨 6 prompts ready: 1 Thumbnail + 5 Scene Illustrations`);
+
+                    // Show the image prompts download button
+                    const downloadBtn = document.getElementById('downloadImageBtn');
+                    downloadBtn.style.display = 'block';
+                    downloadBtn.textContent = '🎨 DOWNLOAD AI IMAGE PROMPTS (6 Prompts)';
+                    downloadBtn.disabled = false;
+                } catch (imageError) {
+                    console.error('❌ Image generation error:', imageError);
+                    updateStatus(`⚠️ Image prompt generation failed: ${imageError.message}`);
+                    updateStatus(`💡 Tip: Check API key rate limits (15 RPM free tier)`);
+                    updateStatus(`✅ Script generation successful - you can retry for images`);
+
+                    // Show button but disabled with error message
+                    const downloadBtn = document.getElementById('downloadImageBtn');
+                    downloadBtn.style.display = 'block';
+                    downloadBtn.textContent = '⚠️ Image Generation Failed - Retry Script Generation';
+                    downloadBtn.disabled = true;
+                    downloadBtn.style.opacity = '0.6';
+                    // Don't fail the whole process if image generation fails
+                }
 
                 updateProgress(100);
                 updateStatus(`🎉 Complete! ${finalScript.length.toLocaleString()} characters in ${totalTime}s`);
@@ -1044,6 +1088,166 @@ QUALITY STANDARDS (DOCUMENT 8 STANDARD):
 Write ${targetChars.toLocaleString()} characters completing the script powerfully with NO PRICE MENTION.`;
         }
 
+        function buildImagePromptRequest(title, script) {
+            return `You are an expert AI image prompt writer for trading psychology YouTube content.
+
+GENERATED SCRIPT:
+${script.substring(0, 8000)}... [Script continues - analyze full narrative arc]
+
+VIDEO TITLE: ${title}
+
+YOUR TASK:
+Create 6 detailed AI image generation prompts for this trading psychology video script. Follow this EXACT structure:
+
+═══════════════════════════════════════════════════════════════
+IMAGE 1 - THUMBNAIL (YouTube Thumbnail Style)
+═══════════════════════════════════════════════════════════════
+
+Title Text for Red Box: [EXTRACT 2-4 KEY WORDS FROM: "${title}"]
+
+AI Image Generation Prompt:
+"YouTube thumbnail design, professional trading content, RED rectangular banner at top of image (#E74C3C), white bold sans-serif text inside red banner reading '[EXTRACTED KEY WORDS]', below banner: minimalist stick figure illustration in navy blue (#2C3E50), stick figure sitting at modern trading desk, computer monitor showing candlestick chart with [RELEVANT PATTERN FROM SCRIPT], [EMOTIONAL STATE FROM SCRIPT] body language, clean white background (#FFFFFF), simple clean lines, limited color palette (red banner, navy blue figure, orange/yellow accents #F39C12, green for profits #27AE60, red for losses #E74C3C), professional digital art style, ultra-clean composition, YouTube thumbnail optimized, 16:9 aspect ratio, no additional text overlays, no speech bubbles, high contrast for mobile viewing."
+
+Visual Elements:
+✓ RED rectangular box at top (spanning width)
+✓ White bold text: "[EXTRACTED KEY WORDS]"
+✓ Stick figure at trading desk
+✓ Monitor with [specific chart pattern from script]
+✓ [Emotional state from script] body language
+✓ Clean professional background
+
+Color Palette:
+Banner: RED (#E74C3C)
+Text in Banner: WHITE (#FFFFFF)
+Stick Figure: Navy Blue (#2C3E50)
+Background: White/Light Gray (#FFFFFF, #ECF0F1)
+Accents: Orange (#F39C12), Green (#27AE60) for wins, Red for losses
+
+Emotional Tone: [Based on script narrative]
+Chart Pattern: [Based on script topic]
+Composition: Red banner top 20%, stick figure scene bottom 80%
+
+═══════════════════════════════════════════════════════════════
+IMAGE 2 - PROBLEM SCENE
+═══════════════════════════════════════════════════════════════
+
+Scene Context: [Extract problem description from script - what struggle does the amateur trader face?]
+
+AI Image Generation Prompt:
+"Minimalist stick figure illustration, stressed trader with hunched forward posture, navy blue stick figure (#2C3E50), gripping head with hands showing frustration, sitting at trading desk, computer monitor showing RED declining candlestick chart, stress lines radiating from figure, thought bubble with '[EXTRACT WORRIED THOUGHT FROM SCRIPT]', scattered papers on desk, coffee cup, tense body language, clean light background, professional digital art, simple clean lines, limited color palette (navy blue figure, red losing chart #E74C3C, dark gray accents #34495E), sense of chaos and stress, no text overlays except thought bubble, suitable for educational video content."
+
+Visual Elements:
+✓ Stressed stick figure (hunched, frustrated)
+✓ Red declining chart on monitor
+✓ Thought bubble: "[Worried thought from script]"
+✓ Chaotic desk environment
+✓ Tense body language
+
+Emotional Tone: Stressed, frustrated, overwhelmed
+Chart Pattern: Declining red candles, losses
+Purpose: Show the problem/struggle traders face
+
+═══════════════════════════════════════════════════════════════
+IMAGE 3 - EMOTIONAL STRUGGLE
+═══════════════════════════════════════════════════════════════
+
+Scene Context: [Extract struggle moment from script - what internal conflict does the trader face?]
+
+AI Image Generation Prompt:
+"Minimalist stick figure illustration, conflicted trader showing indecision, navy blue stick figure (#2C3E50), sitting at trading desk with hand on chin in contemplative pose, computer monitor showing [EXTRACT CHART PATTERN FROM SCRIPT], two thought bubbles showing internal conflict - left bubble: '[EXTRACT FEAR THOUGHT FROM SCRIPT]', right bubble: '[EXTRACT GREED/HOPE THOUGHT FROM SCRIPT]', clean background, professional digital art, simple clean lines, limited color palette (navy blue, orange accents #F39C12, gray #95A5A6), sense of internal battle, no additional text, educational video style."
+
+Visual Elements:
+✓ Contemplative stick figure
+✓ Chart showing key decision point
+✓ Two thought bubbles (internal conflict)
+✓ Clean, focused composition
+
+Emotional Tone: Conflicted, indecisive, internal struggle
+Chart Pattern: [Based on script - breakout, consolidation, etc.]
+Purpose: Show the psychological battle
+
+═══════════════════════════════════════════════════════════════
+IMAGE 4 - CONCEPT/FRAMEWORK EXPLANATION
+═══════════════════════════════════════════════════════════════
+
+Scene Context: [Extract core concept/framework from script - what is the key insight or system being taught?]
+
+AI Image Generation Prompt:
+"Minimalist stick figure illustration, confident trader in teaching pose, navy blue stick figure (#2C3E50), sitting at organized trading desk, single clean monitor showing [EXTRACT FRAMEWORK VISUALIZATION FROM SCRIPT - could be support/resistance, risk zones, etc.], thought bubble: '[EXTRACT KEY CONCEPT INSIGHT FROM SCRIPT]', calm focused body language, clean minimalist background, professional digital art, simple clean lines, limited color palette (navy blue, green success indicators #27AE60, orange framework highlights #F39C12), sense of clarity and understanding, educational diagram style on screen, no text overlays except thought bubble."
+
+Visual Elements:
+✓ Confident, teaching posture
+✓ Clear framework visualization on screen
+✓ Thought bubble: "[Core concept insight from script]"
+✓ Organized, professional setup
+
+Emotional Tone: Confident, clear, educational
+Visual Style: Framework/system visualization
+Purpose: Explain the solution/concept
+
+═══════════════════════════════════════════════════════════════
+IMAGE 5 - PROFESSIONAL EXECUTION
+═══════════════════════════════════════════════════════════════
+
+Scene Context: [Extract solution from script - how does the professional trader execute correctly?]
+
+AI Image Generation Prompt:
+"Minimalist stick figure illustration, calm professional trader in zen-like posture, navy blue stick figure (#2C3E50), sitting relaxed at trading desk, single monitor showing GREEN ascending candlestick chart, small risk label visible '0.10' on desk, thought bubble: '[EXTRACT DISCIPLINED THOUGHT FROM SCRIPT]', peaceful body language, clean organized environment, professional digital art, simple clean lines, limited color palette (navy blue, green winning chart #27AE60, white background #FFFFFF), sense of control and peace, no additional text except labels and thought bubble."
+
+Visual Elements:
+✓ Calm, zen-like posture
+✓ Green winning chart
+✓ Small risk indicator "0.10"
+✓ Peaceful organized environment
+✓ Thought bubble: "[Disciplined mindset from script]"
+
+Emotional Tone: Calm, controlled, professional
+Chart Pattern: Winning trade, upward trend
+Purpose: Show the correct professional approach
+
+═══════════════════════════════════════════════════════════════
+IMAGE 6 - BEFORE/AFTER TRANSFORMATION (Split Screen)
+═══════════════════════════════════════════════════════════════
+
+Scene Context: [Extract transformation arc from script - what is the contrast between amateur and professional?]
+
+AI Image Generation Prompt:
+"Minimalist stick figure split-screen comparison, LEFT SIDE: stressed amateur trader hunched over desk, RED declining chart on monitor, label '10.00' high risk visible, thought bubble showing worry '[EXTRACT AMATEUR MINDSET FROM SCRIPT]', chaotic environment | VERTICAL DIVIDING LINE in center | RIGHT SIDE: calm professional trader in zen posture, GREEN ascending chart on monitor, label '0.10' small risk visible, thought bubble showing discipline '[EXTRACT PROFESSIONAL MINDSET FROM SCRIPT]', organized environment | both traders navy blue (#2C3E50), professional digital art, simple clean lines, clear before/after contrast, limited color palette (navy blue figures, red for losses #E74C3C, green for wins #27AE60, white background #FFFFFF), powerful transformation visual, no additional text except risk labels and thought bubbles, YouTube video thumbnail style."
+
+Visual Elements:
+✓ LEFT: Amateur (stressed, red chart, "10.00" risk)
+✓ CENTER: Vertical dividing line
+✓ RIGHT: Professional (calm, green chart, "0.10" risk)
+✓ Clear visual contrast and transformation
+
+Emotional Tone: Contrasting - struggle to success
+Purpose: Show complete transformation journey
+Composition: 50/50 split, clear "before and after"
+
+═══════════════════════════════════════════════════════════════
+
+CRITICAL REQUIREMENTS:
+✓ Thumbnail (Image 1) MUST have RED box (#E74C3C) with WHITE text
+✓ All stick figures navy blue (#2C3E50)
+✓ Trading desks and monitors in every scene
+✓ Specific chart patterns based on script content
+✓ Emotional states match script narrative
+✓ Extract actual thoughts/quotes from the script for thought bubbles
+✓ Clean, professional, YouTube-optimized
+✓ Each prompt 150-200 words, highly detailed
+✓ Include color codes, composition details, emotional tone
+✓ NO RED BOX in images 2-6 (only thumbnail has red box)
+
+ANALYZE THE SCRIPT CAREFULLY:
+- Identify the main problem/struggle
+- Extract the core psychological insight
+- Find the solution/framework presented
+- Capture the transformation arc
+- Use actual language from the script for thought bubbles
+
+Generate all 6 prompts now in the structured format above. Make each prompt detailed and specific to THIS script's narrative.`;
+        }
+
         function downloadScript() {
             if (!finalScript) {
                 alert('No script to download!');
@@ -1083,6 +1287,62 @@ ${finalScript}`;
             URL.revokeObjectURL(url);
             
             updateStatus(`📥 Downloaded: ${filename}`);
+        }
+
+        function downloadImagePrompts() {
+            console.log('📥 Download image prompts clicked');
+            console.log('📝 finalImagePrompts length:', finalImagePrompts ? finalImagePrompts.length : 0);
+
+            if (!finalImagePrompts) {
+                alert('No image prompts to download! Please generate a script first.');
+                return;
+            }
+
+            const title = document.getElementById('videoTitle').value.trim() || 'trading_script';
+            const safeTitle = title.replace(/[^a-z0-9]/gi, '_').toLowerCase().substring(0, 50);
+            const filename = `image_prompts_${safeTitle}_${Date.now()}.txt`;
+            console.log('📂 Creating file:', filename);
+
+            const imagePromptsHeader = `═══════════════════════════════════════
+AI IMAGE GENERATION PROMPTS
+Video: ${title}
+Generated: ${new Date().toLocaleString()}
+Style: Trading Psychology - Stick Figure Illustrations
+Total Prompts: 6 (1 Thumbnail + 5 Scene Illustrations)
+Compatible With: MidJourney, DALL-E, Stable Diffusion
+═══════════════════════════════════════
+
+${finalImagePrompts}
+
+═══════════════════════════════════════
+USAGE INSTRUCTIONS:
+═══════════════════════════════════════
+
+1. Copy each individual prompt to your AI image generator
+2. Thumbnail (Image 1) - Use for YouTube thumbnail
+3. Images 2-6 - Use as B-roll scenes in your video
+4. Maintain consistency by using all 6 images from same set
+5. Adjust aspect ratios as needed (16:9 for thumbnail, flexible for scenes)
+
+STYLE NOTES:
+- All images use consistent stick figure style
+- Color palette: Navy Blue (#2C3E50), Red (#E74C3C), Green (#27AE60), Orange (#F39C12)
+- Professional, educational, YouTube-optimized
+- Clean, minimalist, high-contrast for mobile viewing
+
+═══════════════════════════════════════`;
+
+            const blob = new Blob([imagePromptsHeader], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            updateStatus(`🎨 Downloaded: ${filename}`);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
