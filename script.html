@@ -326,12 +326,22 @@
                     <div class="input-group">
                         <label>Gemini 2.5 Flash API Key</label>
                         <input type="password" id="apiKey" placeholder="Enter your API key..." />
+                        <div style="display: flex; gap: 10px; margin-top: 8px;">
+                            <button onclick="saveApiKey()" style="flex: 1; padding: 8px; background: rgba(139,92,246,0.2); border: 1px solid #8b5cf6; border-radius: 6px; color: #c4b5fd; cursor: pointer; font-size: 0.85em;">
+                                💾 Save API Key
+                            </button>
+                            <button onclick="clearApiKey()" style="flex: 1; padding: 8px; background: rgba(239,68,68,0.2); border: 1px solid #ef4444; border-radius: 6px; color: #fca5a5; cursor: pointer; font-size: 0.85em;">
+                                🗑️ Clear Saved Key
+                            </button>
+                        </div>
+                        <div id="apiKeyStatus" style="font-size: 0.8em; margin-top: 6px; color: #10b981;"></div>
                     </div>
                     <div class="info-box">
                         <strong>Get Free API:</strong> ai.google.dev<br>
                         <strong>Free Tier:</strong> 15 RPM, 1,500 RPD<br>
                         <strong>This tool:</strong> 4 optimized API calls<br>
-                        (3 for script + 1 for image prompts)
+                        (3 for script + 1 for image prompts)<br>
+                        <strong>💾 Auto-Save:</strong> Click "Save API Key" button
                     </div>
                 </div>
 
@@ -463,11 +473,43 @@
             value: "Everything the elite traders studied to master their psychology - the frameworks, the audiobooks, the mental systems that turned struggling traders into consistent winners."
         };
 
+        // API Key Management Functions
+        function saveApiKey() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            if (!apiKey) {
+                document.getElementById('apiKeyStatus').innerHTML = '⚠️ Please enter an API key first';
+                document.getElementById('apiKeyStatus').style.color = '#fca5a5';
+                return;
+            }
+            localStorage.setItem('gemini_api_key', apiKey);
+            document.getElementById('apiKeyStatus').innerHTML = '✅ API Key saved! Will auto-load on next visit';
+            document.getElementById('apiKeyStatus').style.color = '#10b981';
+            console.log('✅ API Key saved to localStorage');
+        }
+
+        function loadApiKey() {
+            const savedKey = localStorage.getItem('gemini_api_key');
+            if (savedKey) {
+                document.getElementById('apiKey').value = savedKey;
+                document.getElementById('apiKeyStatus').innerHTML = '✅ API Key loaded from saved';
+                document.getElementById('apiKeyStatus').style.color = '#10b981';
+                console.log('✅ API Key loaded from localStorage');
+            }
+        }
+
+        function clearApiKey() {
+            localStorage.removeItem('gemini_api_key');
+            document.getElementById('apiKey').value = '';
+            document.getElementById('apiKeyStatus').innerHTML = '🗑️ Saved API Key cleared';
+            document.getElementById('apiKeyStatus').style.color = '#fca5a5';
+            console.log('🗑️ API Key cleared from localStorage');
+        }
+
         function selectLength(length, element) {
             selectedLength = length;
             document.querySelectorAll('.length-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
-            
+
             document.getElementById('lengthInfo').innerHTML = `
                 Selected: <strong>${(length/1000)}K minimum</strong><br>
                 ONE seamless block<br>
@@ -1347,6 +1389,7 @@ STYLE NOTES:
 
         document.addEventListener('DOMContentLoaded', () => {
             selectLength(60000, document.querySelector('.length-option.selected'));
+            loadApiKey(); // Auto-load saved API key
         });
     </script>
 </body>
